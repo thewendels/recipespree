@@ -3,6 +3,7 @@
   name: recipe[:name],
   source: recipe[:source],
   recipe_url: recipe[:recipe_url],
+  servings: recipe[:servings],
   total_prep_time: recipe[:total_prep_time], 
   intro: recipe[:intro],
   ingredients: recipe[:ingredients],
