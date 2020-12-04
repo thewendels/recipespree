@@ -26,8 +26,30 @@ class Api::RecipesController < ApplicationController
   end
 
   def show
-    @recipe = Recipe.find_by(id: params[:id])
+    @recipe = Recipe.find(params[:id])
     render 'show.json.jb'
+  end
+
+  def update
+    @recipe = Recipe.find(params[:id])
+
+    @recipe.name = params[:name] || @recipe.name
+    @recipe.source = params[:source] || @recipe.source
+    @recipe.recipe_url = params[:recipe_url] || @recipe.recipe_url
+    @recipe.servings = params[:servings] || @recipe.servings
+    @recipe.total_prep_time = params[:total_prep_time] || @recipe.total_prep_time
+    @recipe.intro = params[:intro] || @recipe.intro
+    @recipe.ingredients = params[:ingredients] || @recipe.ingredients
+    @recipe.instructions = params[:instructions] || @recipe.instructions
+    @recipe.notes = params[:notes] || @recipe.notes
+    @recipe.image_url = params[:image_url] || @recipe.image_url
+
+    if @recipe.save
+      render 'show.json.jb'
+    else 
+      render json: { errors: @recipe.errors.full_messages }, status: :unprocessable_entity
+    end
+
   end
 
 end
