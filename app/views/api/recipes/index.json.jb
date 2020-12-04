@@ -1,0 +1,3 @@
+@recipes.map do |recipe|
+  render partial: 'recipe.json.jb', locals: { recipe: recipe}
+end

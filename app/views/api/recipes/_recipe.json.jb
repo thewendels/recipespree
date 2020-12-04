@@ -1,0 +1,12 @@
+{
+  id: recipe[:id],
+  name: recipe[:name],
+  source: recipe[:source],
+  recipe_url: recipe[:recipe_url],
+  total_prep_time: recipe[:total_prep_time], 
+  intro: recipe[:intro],
+  ingredients: recipe[:ingredients],
+  instructions: recipe[:instructions],
+  notes: recipe[:notes],
+  image_url: recipe[:image_url]
+}
