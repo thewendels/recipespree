@@ -14,4 +14,11 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def show
+    if current_user
+      @user = current_user
+      render 'show.json.jb'
+    end
+  end
+
 end
