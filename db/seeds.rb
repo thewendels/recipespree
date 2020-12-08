@@ -4,7 +4,9 @@ Tag.create!([
   {name: "Entree | Seafood"},
   {name: "Entree | One-Pan Meal"},
   {name: "Dessert | Chocolate"},
-  {name: "Dessert | Cookies"}
+  {name: "Dessert | Cookies"},
+  {name: "Soup"},
+  {name: "Entree | Poultry"}
 ])
 Recipe.create!([
   {name: "Emily's English Roasted Potatoes", source: "Barefoot Contessa", recipe_url: "https://barefootcontessa.com/recipes/emilys-english-roasted-potatoes", servings: "6-8", total_prep_time: nil, intro: nil, ingredients: "Kosher salt\n    3 pounds large Yukon Gold potatoes, peeled and 1½ to 2-inch diced\n    ½ cup vegetable oil (be sure it’s fresh!)\n    Coarse sea salt or fleur de sel\n    Minced parsley", instructions: "Preheat the oven to 425 degrees.\n\n    Bring a large pot of water with 2 tablespoons kosher salt to a boil.  Add the potatoes, return to a boil, lower the heat, and simmer for 8 minutes.  Drain the potatoes, place them back in the pot with the lid on, and shake the pot roughly for 5 seconds to rough up the edges.  Carefully transfer the potatoes in one layer to a baking rack set over a sheet pan.  Set aside to dry for at least 15 minutes.  (They can sit at room temperature for several hours or in the fridge for up to 6 hours.)\n    \n    Pour the oil onto another sheet pan, tilt the pan to distribute the oil, and place the pan in the oven for 5 to 7 minutes, until the oil is smoking hot.  Transfer the potatoes carefully into the oil (I use a large metal spatula) and toss them lightly to coat each potato with the hot oil. Lower the oven temperature to 350 degrees F. Roast for 45 minutes to one hour, turning the potatoes occasionally with tongs, until very browned and crisp on the outside and tender and creamy inside.\n    \n    Transfer to a serving platter, sprinkle generously with 1½ to 2 teaspoons sea salt and parsley and serve hot.", notes: nil, image_url: "https://d14iv1hjmfkv57.cloudfront.net/assets/recipes/emilys-english-roasted-potatoes/_1200x600_crop_center-center_82_line/IMG_0935.jpg?mtime=20200506111848&focal=none&tmtime=20200930132238"},
@@ -20,11 +22,11 @@ RecipeTag.create!([
   {recipe_id: 3, tag_id: 3},
   {recipe_id: 3, tag_id: 4},
   {recipe_id: 4, tag_id: 5},
-  {recipe_id: 4, tag_id: 6}
+  {recipe_id: 4, tag_id: 6},
+  {recipe_id: 5, tag_id: 7},
+  {recipe_id: 6, tag_id: 8}
 ])
 User.create!([
-  {username: "wendyp", email: "wendy@example.com", password_digest: "$2a$12$bOJF7zfhGuBvL1BMcatUs.4sEPpM4BcO3qJEFPs2vp8tgZCVWNX92", admin: true},
-  {username: "benn", email: "ben@example.com", password_digest: "$2a$12$ywcxd1z1qerarPC62LokYecKFjFTRh9.PJLbNgkSt/KC8ZI2sFWN2", admin: false},
-  {username: "Tester", email: "test@example.com", password_digest: "$2a$12$2lBvOHBXNuX9gscQoQUIw.KJq61WRUgj9zO495oHp8U4ooMK0Ui2m", admin: false},
-  {username: "Erik", email: "erik@example.com", password_digest: "$2a$12$XEPxWddWSdKkfrk7EDcFquYSOyFR7LSpH.vEX5OSVxfZ95XMfRGN2", admin: false}
+  {username: "benneuman", email: "ben@example.com", password_digest: "$2a$12$Sx4gp9ftdGjQ5suIsbr9duEEkJ3mYoyC/fDF/8r36VyNTBrlPYa8i", admin: false},
+  {username: "wendypaler", email: "wendy@example.com", password_digest: "$2a$12$y.bWHsqd/nh.xiUqjs8heO/B4DPH9xGHTFYQhgy6fCyOEZAicYwoO", admin: true}
 ])
