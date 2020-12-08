@@ -1,7 +1,7 @@
 class Api::RecipesController < ApplicationController
 
   def index
-    @recipes = Recipe.all
+    @recipes = Recipe.all.order(id: :desc)
     render 'index.json.jb'
   end
 
