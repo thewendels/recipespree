@@ -1,0 +1,5 @@
+{
+  id: tag.id,
+  name: tag.name,
+  recipes: tag.recipes.map{ |recipe| recipe.name }
+}

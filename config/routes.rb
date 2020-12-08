@@ -9,9 +9,15 @@ Rails.application.routes.draw do
     post "/sessions" => "sessions#create"
     
     get "/recipes" => "recipes#index"
-    get "/recipes/:id" => "recipes#show"
     post "/recipes" => "recipes#create"
+    get "/recipes/:id" => "recipes#show"
     patch "/recipes/:id" => "recipes#update"
+
+    get "/tags" => "tags#index"
+    post "/tags" => "tags#create"
+    get "/tags/:id" => "tags#show"
+    patch "/tags/:id" => "tags#update"
+    delete "/tags/:id" => "tags#destroy"
 
   end
 end
