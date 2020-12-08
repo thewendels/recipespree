@@ -21,4 +21,21 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def update
+    if current_user
+      @user = current_user
+
+      @user.username = params[:username] || @user.username
+      @user.email = params[:email] || @user.email
+      @user.password = params[:password] || @user.password
+      @user.password_confirmation = params[:password_confirmation] || @user.password_confirmation
+
+      if @user.save
+        render 'show.json.jb'
+      else 
+        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+  end
+
 end

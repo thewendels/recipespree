@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     post "/users" => "users#create"
     get "/users/" => "users#show"
-    patch "/recipes/:id" => "recipes#update"
+    patch "/users/" => "users#update"
 
     post "/sessions" => "sessions#create"
     
