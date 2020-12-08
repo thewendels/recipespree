@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     post "/users" => "users#create"
     get "/users/" => "users#show"
     patch "/users/" => "users#update"
+    delete "/users" => "users#destroy"
 
     post "/sessions" => "sessions#create"
     

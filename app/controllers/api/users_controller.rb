@@ -38,4 +38,13 @@ class Api::UsersController < ApplicationController
     end
   end
 
+  def destroy
+    if current_user
+      @user = current_user
+
+      @user.destroy
+      render json: {message: "Your account has been deleted! You can sign up again at any time."}
+    end
+  end
+
 end
