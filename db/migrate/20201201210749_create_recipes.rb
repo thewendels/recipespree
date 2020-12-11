@@ -1,6 +1,7 @@
 class CreateRecipes < ActiveRecord::Migration[6.0]
   def change
     create_table :recipes do |t|
+      t.string :user_id
       t.string :name
       t.string :source
       t.string :recipe_url

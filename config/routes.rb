@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     delete "/recipes/:id" => "recipes#destroy"
 
     get "/tags" => "tags#index"
-    post "/tags" => "tags#create"
+    # post "/tags" => "tags#create"
     get "/tags/:id" => "tags#show"
     patch "/tags/:id" => "tags#update"
     delete "/tags/:id" => "tags#destroy"
