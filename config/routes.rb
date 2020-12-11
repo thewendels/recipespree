@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     patch "/tags/:id" => "tags#update"
     delete "/tags/:id" => "tags#destroy"
 
-    post "/recipe_tags" => "recipe_tags.create"
+    post "/recipe_tags" => "recipe_tags#create"
     delete "/recipe_tags/:id" => "recipe_tags#destroy"
 
   end
