@@ -5,16 +5,16 @@ class Api::TagsController < ApplicationController
     render 'index.json.jb'
   end
   
-  def create
-    @tag = Tag.new({
-      name: params[:name]
-    })
-    if @tag.save
-      render 'show.json.jb'
-    else
-      render json: { errors: @tag.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
+  # def create
+  #   @tag = Tag.new({
+  #     name: params[:name]
+  #   })
+  #   if @tag.save
+  #     render 'show.json.jb'
+  #   else
+  #     render json: { errors: @tag.errors.full_messages }, status: :unprocessable_entity
+  #   end
+  # end
 
   def show
     @tag = Tag.find(params[:id])
@@ -31,7 +31,6 @@ class Api::TagsController < ApplicationController
     else 
       render json: { errors: @tag.errors.full_messages }, status: :unprocessable_entity
     end
-
   end
 
   def destroy

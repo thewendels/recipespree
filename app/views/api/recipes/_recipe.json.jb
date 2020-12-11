@@ -10,5 +10,6 @@
   ingredients: recipe.ingredients,
   instructions: recipe.instructions,
   notes: recipe.notes,
-  image_url: recipe.image_url
+  image_url: recipe.image_url,
+  tags: recipe.tags.map{ |tag| tag.name }
 }
