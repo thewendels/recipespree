@@ -2,7 +2,8 @@ class Api::RecipesController < ApplicationController
   before_action :authenticate_user
 
   def index
-    @recipes = Recipe.all.order(id: :desc)
+    @recipes = Recipe.where(user_id: current_user.id).order(id: :desc)
+    
     search = params[:search]
 
     if search
@@ -14,6 +15,7 @@ class Api::RecipesController < ApplicationController
 
   def create
     @recipe = Recipe.new({
+      user_id: current_user.id,
       name: params[:name],
       source: params[:source],
       recipe_url: params[:recipe_url],

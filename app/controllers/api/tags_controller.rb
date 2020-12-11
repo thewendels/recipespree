@@ -2,7 +2,7 @@ class Api::TagsController < ApplicationController
   before_action :authenticate_user
 
   def index
-    @tags = Tag.all.order(name: :asc)
+    @tags = Tag.where(user_id: current_user.id).order(name: :asc)
     render 'index.json.jb'
   end
   

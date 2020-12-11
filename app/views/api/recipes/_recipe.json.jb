@@ -1,5 +1,6 @@
 {
   id: recipe.id,
+  user_id: recipe.user_id,
   name: recipe.name,
   source: recipe.source,
   recipe_url: recipe.recipe_url,
