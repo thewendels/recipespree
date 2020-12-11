@@ -1,4 +1,5 @@
 class Api::UsersController < ApplicationController
+  before_action :authenticate_user, except: [:create] 
 
   def create
     user = User.new(
@@ -15,36 +16,30 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    if current_user
-      @user = current_user
-      render 'show.json.jb'
-    end
+    @user = current_user
+    render 'show.json.jb'
   end
 
   def update
-    if current_user
-      @user = current_user
+    @user = current_user
 
-      @user.username = params[:username] || @user.username
-      @user.email = params[:email] || @user.email
-      @user.password = params[:password] || @user.password
-      @user.password_confirmation = params[:password_confirmation] || @user.password_confirmation
+    @user.username = params[:username] || @user.username
+    @user.email = params[:email] || @user.email
+    @user.password = params[:password] || @user.password
+    @user.password_confirmation = params[:password_confirmation] || @user.password_confirmation
 
-      if @user.save
-        render 'show.json.jb'
-      else 
-        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-      end
+    if @user.save
+      render 'show.json.jb'
+    else 
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if current_user
-      @user = current_user
+    @user = current_user
 
-      @user.destroy
-      render json: {message: "Your account has been deleted! You can sign up again at any time."}
-    end
+    @user.destroy
+    render json: {message: "Your account has been deleted! You can sign up again at any time."}
   end
 
 end

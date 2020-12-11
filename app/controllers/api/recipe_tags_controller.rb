@@ -1,4 +1,6 @@
 class Api::RecipeTagsController < ApplicationController
+  before_action :authenticate_user
+
   def create
     tag_name = params[:tag_name]
     # if tag = Tag.find_by(name: tag_name)

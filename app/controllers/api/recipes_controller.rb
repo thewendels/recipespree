@@ -1,4 +1,5 @@
 class Api::RecipesController < ApplicationController
+  before_action :authenticate_user
 
   def index
     @recipes = Recipe.all.order(id: :desc)
