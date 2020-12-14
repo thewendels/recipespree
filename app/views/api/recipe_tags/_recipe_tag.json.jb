@@ -1,5 +1,7 @@
 {
   id: recipe_tag.id,
   recipe: recipe.name,
-  tag: tag.name
+  recipe_id: recipe.id,
+  tag: tag.name,
+  tag_id: tag.id
 }
