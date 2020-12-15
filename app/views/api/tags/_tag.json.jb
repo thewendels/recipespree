@@ -2,5 +2,5 @@
   id: tag.id,
   user_id: tag.user_id,
   name: tag.name,
-  recipes: tag.recipes.map{ |recipe| recipe.name }
+  recipes: tag.recipes.order(:name)
 }
