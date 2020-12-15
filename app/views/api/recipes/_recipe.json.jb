@@ -12,5 +12,5 @@
   instructions: recipe.instructions,
   notes: recipe.notes,
   image_url: recipe.image_url,
-  tags: recipe.tags.map{ |tag| tag.name }
+  tags: recipe.tags.order(:name)
 }
