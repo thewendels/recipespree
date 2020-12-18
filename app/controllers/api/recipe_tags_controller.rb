@@ -23,10 +23,9 @@ class Api::RecipeTagsController < ApplicationController
 
   # Taking a tag off of a recipe
   def destroy
-    @recipe_tag = RecipeTag.find(params[:id])
-
+    @recipe_tag = RecipeTag.find_by(recipe_id: params[:recipe_id], tag_id: params[:tag_id])
     @recipe_tag.destroy
     @recipe = Recipe.find(params[:recipe_id])
-    render 'recipes/show.json.jb'
+    render 'show.json.jb'
   end
 end
