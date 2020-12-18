@@ -1,3 +1,7 @@
+User.create!([
+  {username: 'wendyp', email: 'wendy@example.com', password: 'password', password_confirmation: 'password'},
+  {username: 'benn', email: 'benn@example.com', password: 'password', password_confirmation: 'password'},
+])
 Tag.create!([
   {user_id: "2", name: "Side | Starchy"},
   {user_id: "2", name: "Side | Veggie"},
@@ -29,9 +33,4 @@ RecipeTag.create!([
   {recipe_id: 5, tag_id: 7},
   {recipe_id: 6, tag_id: 8}
 ])
-User.create!([
-  {username: "benen", email: "ben@example.com", password_digest: "$2a$12$Vhe9Mf1./TkHvUMKNbV0..tlA2PPjiK18VFvDLpVSXiPOQRtJ3G3e", admin: false},
-  {username: "wendypaler", email: "wendy@example.com", password_digest: "$2a$12$YuEhrpmcwm./f2TSdga1lOO1N7IqU686Kr6lG0b0aObKTSTdFpdDe", admin: true},
-  {username: "lesliep", email: "leslie@example.com", password_digest: "$2a$12$sXuLLKI9X9SP2/fNBYU2au1LKIy70v5XobPoF8.aSyyhhHgCR5Ubq", admin: false},
-  {username: "test", email: "test@example.com", password_digest: "$2a$12$lXRppODCGaHlpfSxihonp.SvM/PBT8epIK7soMoa8ErM/041UsyJm", admin: false}
-])
+
