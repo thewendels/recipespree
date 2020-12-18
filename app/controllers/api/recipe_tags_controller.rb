@@ -14,6 +14,7 @@ class Api::RecipeTagsController < ApplicationController
       tag_id: @tag.id
     })
     if @recipe_tag.save
+      @recipe = Recipe.find(params[:recipe_id])
       render 'show.json.jb'
     else
       render json: { errors: @recipe_tag.errors.full_messages }, status: :unprocessable_entity
@@ -25,6 +26,7 @@ class Api::RecipeTagsController < ApplicationController
     @recipe_tag = RecipeTag.find(params[:id])
 
     @recipe_tag.destroy
-    render json: {message: "Recipe tag successfully deleted!"}
+    @recipe = Recipe.find(params[:recipe_id])
+    render 'recipes/show.json.jb'
   end
 end

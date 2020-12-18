@@ -1,1 +1,1 @@
-render partial: 'recipe_tag.json.jb', locals: { recipe_tag: @recipe_tag, recipe: @recipe, tag: @tag }
+render partial: 'api/recipes/recipe.json.jb', locals: { recipe: @recipe }
