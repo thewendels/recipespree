@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class Recipe < ApplicationRecord
   belongs_to :user
   has_many :recipe_tags, dependent: :destroy
@@ -7,6 +9,37 @@ class Recipe < ApplicationRecord
   validates :name, presence: true
   validates :ingredients, presence: true
   validates :instructions, presence: true
+
+  def self.scrape_recipe(url)
+    parsed_recipe = Nokogiri::HTML(
+      URI.open(url)
+    )
+    schemas = parsed_recipe.css("script[type='application/ld+json']")
+    parsed_schemas = schemas.map { |schema| JSON.parse(schema.text) }
+    recipe_schema = parsed_schemas.find do |parsed_schema|
+      parsed_schema['@type'] == 'Recipe'
+    end
+  end
+
+  def self.transform_recipe(recipe, url) 
+    if recipe["image"].class == Array
+      image = recipe["image"][0]
+    elsif recipe["image"].class == String
+      image = recipe["image"]
+    end
+    {
+      name: recipe["name"],
+      source: recipe["author"]["name"], #update this to grab name of site not person
+      recipe_url: url,
+      servings: recipe["recipeYield"],
+      # total_prep_time: ,
+      intro: recipe["description"],
+      ingredients: recipe["recipeIngredient"].join("\n"),
+      instructions: recipe["recipeInstructions"].map{ |instruction| instruction["text"] }.join("\n"),
+      # notes: ,
+      image_url: image
+    }
+  end
 
   def friendly_prep_time
     if total_prep_time != nil

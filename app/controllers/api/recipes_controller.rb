@@ -34,10 +34,25 @@ class Api::RecipesController < ApplicationController
     end
   end
 
+  def scrape
+    @url = params[:url]
+    @scraped_recipe = Recipe.scrape_recipe(@url)
+    #error handling - did this work, is it nil?
+    @transformed_recipe = Recipe.transform_recipe(@scraped_recipe, @url)
+    @transformed_recipe[:user_id] = current_user.id
+    @recipe = Recipe.new(@transformed_recipe)
+    if @recipe.save
+      render 'show.json.jb'
+    else
+      render json: { errors: @recipe.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def show
     @recipe = Recipe.find(params[:id])
     render 'show.json.jb'
   end
+  
 
   def update
     @recipe = Recipe.find(params[:id])

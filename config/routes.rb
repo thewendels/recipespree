@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     
     get "/recipes" => "recipes#index"
     post "/recipes" => "recipes#create"
+    post "/recipes/scrape" => "recipes#scrape"
     get "/recipes/:id" => "recipes#show"
     patch "/recipes/:id" => "recipes#update"
     delete "/recipes/:id" => "recipes#destroy"
