@@ -11,6 +11,7 @@
   ingredients: recipe.ingredients,
   stepped_ingredients: recipe.stepped_ingredients,
   instructions: recipe.instructions,
+  stepped_instructions: recipe.stepped_instructions,
   notes: recipe.notes,
   image_url: recipe.image_url,
   tags: recipe.tags.order(:name)

@@ -25,4 +25,8 @@ class Recipe < ApplicationRecord
       ingredients.split("\n").map { |ingredient|  ingredient.strip }
   end
 
+  def stepped_instructions
+    instructions.split("\n").map { |instruction|  instruction.strip }.reject { |instruction| instruction.empty? }
+end
+
 end
