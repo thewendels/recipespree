@@ -20,4 +20,9 @@ class Recipe < ApplicationRecord
     end 
     result
   end
+
+  def stepped_ingredients
+      ingredients.split("\n").map { |ingredient|  ingredient.strip }
+  end
+
 end

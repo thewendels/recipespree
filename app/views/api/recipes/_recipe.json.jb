@@ -9,6 +9,7 @@
   friendly_prep_time: recipe.friendly_prep_time, 
   intro: recipe.intro,
   ingredients: recipe.ingredients,
+  stepped_ingredients: recipe.stepped_ingredients,
   instructions: recipe.instructions,
   notes: recipe.notes,
   image_url: recipe.image_url,
