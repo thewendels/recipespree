@@ -13,8 +13,10 @@ class Recipe < ApplicationRecord
       hours = total_prep_time / 60
       minutes = total_prep_time % 60
       result = ""
-      result += "#{hours} hours" if hours > 0
-      result += "#{minutes} minutes" if minutes > 0
+      result += "#{hours} hour" if hours == 1
+      result += "#{hours} hours" if hours > 1
+      result += " #{minutes} minute" if minutes == 1
+      result += " #{minutes} minutes" if minutes > 1
     end 
     result
   end
