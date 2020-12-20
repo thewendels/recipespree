@@ -37,7 +37,7 @@ class Api::RecipesController < ApplicationController
   def scrape
     @url = params[:url]
     @scraped_recipe = Recipe.scrape_recipe(@url)
-    #error handling - did this work, is it nil?
+    #error handling - did this work, is it nil?, if nil render some JSON and get out of here, call "return if recipe == nil" to get out of method
     @transformed_recipe = Recipe.transform_recipe(@scraped_recipe, @url)
     @transformed_recipe[:user_id] = current_user.id
     @recipe = Recipe.new(@transformed_recipe)
