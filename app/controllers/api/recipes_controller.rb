@@ -5,9 +5,10 @@ class Api::RecipesController < ApplicationController
     @recipes = Recipe.where(user_id: current_user.id).order(id: :desc)
     
     search = params[:search]
-
     if search
-      @recipes = @recipes.where("name LIKE ? OR ingredients LIKE ? OR instructions LIKE ? or notes LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%")
+      search_terms = search.split(" ").each do |search_term|
+        @recipes = @recipes.where("name LIKE ? OR ingredients LIKE ? OR instructions LIKE ? or notes LIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
+      end
     end
 
     render 'index.json.jb'
