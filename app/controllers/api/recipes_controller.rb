@@ -7,7 +7,7 @@ class Api::RecipesController < ApplicationController
     search = params[:search]
     if search
       search_terms = search.split(" ").each do |search_term|
-        @recipes = @recipes.where("name LIKE ? OR ingredients LIKE ? OR instructions LIKE ? or notes LIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
+        @recipes = @recipes.where("name ILIKE ? OR ingredients ILIKE ? OR instructions ILIKE ? or notes ILIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
       end
     end
 
