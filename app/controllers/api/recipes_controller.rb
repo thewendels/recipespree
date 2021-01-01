@@ -40,7 +40,6 @@ class Api::RecipesController < ApplicationController
     parsed_object = Recipe.get_nokogiri_object(url)
     recipe_schema = Recipe.find_recipe_schema(parsed_object)
     site_name = Recipe.find_site_name(parsed_object)
-    #error handling - did this work, is it nil?, if nil render some JSON and get out of here, call "return if recipe == nil" to get out of method
     transformed_recipe = Recipe.transform_recipe(recipe_schema, site_name, url)
     transformed_recipe[:user_id] = current_user.id
     @recipe = Recipe.new(transformed_recipe)
