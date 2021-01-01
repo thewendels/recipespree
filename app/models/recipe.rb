@@ -10,32 +10,39 @@ class Recipe < ApplicationRecord
   validates :ingredients, presence: true
   validates :instructions, presence: true
 
-  def self.scrape_recipe(url)
-    parsed_recipe = Nokogiri::HTML(
+  def self.get_nokogiri_object(url)
+    parsed_object = Nokogiri::HTML(
       URI.open(url)
     )
-    schemas = parsed_recipe.css("script[type='application/ld+json']")
+  end
+
+  def self.find_recipe_schema(parsed_object)
+    schemas = parsed_object.css("script[type='application/ld+json']")
     parsed_schemas = schemas.map { |schema| JSON.parse(schema.text) }
     recipe_schema = parsed_schemas.find do |parsed_schema|
       parsed_schema['@type'] == 'Recipe'
     end
   end
 
-  def self.transform_recipe(recipe, url) 
-    if recipe["image"].class == Array
-      image = recipe["image"][0]
-    elsif recipe["image"].class == String
-      image = recipe["image"]
+  def self.find_site_name(parsed_object)
+    site_name = parsed_object.css('meta[property="og:site_name"]').first['content']
+  end
+
+  def self.transform_recipe(recipe_schema, site_name, url) 
+    if recipe_schema["image"].class == Array
+      image = recipe_schema["image"][0]
+    elsif recipe_schema["image"].class == String
+      image = recipe_schema["image"]
     end
     {
-      name: recipe["name"],
-      source: recipe["author"]["name"], #update this to grab name of site not person
+      name: recipe_schema["name"],
+      source: site_name,
       recipe_url: url,
-      servings: recipe["recipeYield"],
+      servings: recipe_schema["recipeYield"],
       # total_prep_time: ,
-      intro: recipe["description"],
-      ingredients: recipe["recipeIngredient"].join("\n"),
-      instructions: recipe["recipeInstructions"].map{ |instruction| instruction["text"] }.join("\n"),
+      intro: recipe_schema["description"],
+      ingredients: recipe_schema["recipeIngredient"].join("\n"),
+      instructions: recipe_schema["recipeInstructions"].map{ |instruction| instruction["text"].gsub("\n", "") }.join("\n"),
       # notes: ,
       image_url: image
     }
