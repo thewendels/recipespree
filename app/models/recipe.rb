@@ -28,6 +28,29 @@ class Recipe < ApplicationRecord
     site_name = parsed_object.css('meta[property="og:site_name"]').first['content']
   end
 
+  def self.transform_prep_time_to_min(pttime)
+    pttime.delete!("PT")
+    hours = ""
+    minutes = ""
+    mode = ""
+    i = pttime.length - 1
+    while i >= 0
+      if pttime[i] == "M"
+        mode = "min"
+      elsif pttime[i] == "H"
+        mode = "hr"
+      else  
+        if mode == "min"
+          minutes = pttime[i] + minutes
+        elsif mode == "hr"
+          hours = pttime[i] + hours
+        end
+      end
+      i -= 1
+    end
+    minutes.to_i + (hours.to_i * 60)
+  end
+
   def self.transform_recipe(recipe_schema, site_name, url) 
     if recipe_schema["image"].class == Array
       image = recipe_schema["image"][0]
@@ -39,13 +62,12 @@ class Recipe < ApplicationRecord
       source: site_name,
       recipe_url: url,
       servings: recipe_schema["recipeYield"],
-      # total_prep_time: ,
+      total_prep_time: transform_prep_time_to_min(recipe_schema["totalTime"]),
       intro: recipe_schema["description"],
       ingredients: recipe_schema["recipeIngredient"].join("\n"),
       instructions: recipe_schema["recipeInstructions"].map do |instruction| 
         ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) 
       end.join("\n"),
-      # notes: ,
       image_url: image
     }
   end
