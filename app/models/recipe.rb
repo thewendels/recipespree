@@ -42,7 +42,9 @@ class Recipe < ApplicationRecord
       # total_prep_time: ,
       intro: recipe_schema["description"],
       ingredients: recipe_schema["recipeIngredient"].join("\n"),
-      instructions: recipe_schema["recipeInstructions"].map{ |instruction| instruction["text"].gsub("\n", "") }.join("\n"),
+      instructions: recipe_schema["recipeInstructions"].map do |instruction| 
+        ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) 
+      end.join("\n"),
       # notes: ,
       image_url: image
     }
