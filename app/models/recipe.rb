@@ -56,26 +56,28 @@ class Recipe < ApplicationRecord
     if pttime == nil
       0
     else
-      pttime.delete!("PT")
-      hours = ""
-      minutes = ""
-      mode = ""
-      i = pttime.length - 1
-      while i >= 0
-        if pttime[i] == "M"
-          mode = "min"
-        elsif pttime[i] == "H"
-          mode = "hr"
-        else  
-          if mode == "min"
-            minutes = pttime[i] + minutes
-          elsif mode == "hr"
-            hours = pttime[i] + hours
-          end
-        end
-        i -= 1
-      end
-      minutes.to_i + (hours.to_i * 60)
+      # ActiveSupport::Duration with .to_i takes all the times in the object and gives you back the number of seconds
+      time_hash = ActiveSupport::Duration.parse(pttime).to_i/60
+      # pttime.delete!("PT")
+      # hours = ""
+      # minutes = ""
+      # mode = ""
+      # i = pttime.length - 1
+      # while i >= 0
+      #   if pttime[i] == "M"
+      #     mode = "min"
+      #   elsif pttime[i] == "H"
+      #     mode = "hr"
+      #   else  
+      #     if mode == "min"
+      #       minutes = pttime[i] + minutes
+      #     elsif mode == "hr"
+      #       hours = pttime[i] + hours
+      #     end
+      #   end
+      #   i -= 1
+      # end
+      # minutes.to_i + (hours.to_i * 60)
     end
   end
 
