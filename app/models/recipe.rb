@@ -45,7 +45,7 @@ class Recipe < ApplicationRecord
   end
 
   def self.find_site_name(parsed_object)
-    if parsed_object.css('meta[property="og:site_name"]').first == nil
+    if parsed_object.css('meta[property="og:site_name"]').first == nil      
       site_name = ""
     else
       site_name = parsed_object.css('meta[property="og:site_name"]').first['content']
@@ -80,6 +80,14 @@ class Recipe < ApplicationRecord
   end
 
   def self.transform_recipe(recipe_schema, site_name, url) 
+    # Get correct source
+    if url.include?("foodnetwork.com")
+      source = recipe_schema["author"][0]["name"]
+    elsif site_name == ""
+      source = recipe_schema["author"]["name"]
+    else
+      source = site_name
+    end
     # Sanitize intro (remove HTML)
     if url.include?("barefootcontessa.com")
       intro = ""
@@ -111,7 +119,7 @@ class Recipe < ApplicationRecord
     # Build the recipe object
     {
       name: recipe_schema["name"],
-      source: site_name,
+      source: source,
       recipe_url: url,
       servings: recipe_schema["recipeYield"],
       total_prep_time: transform_prep_time_to_min(recipe_schema["totalTime"]),
