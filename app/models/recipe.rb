@@ -29,34 +29,54 @@ class Recipe < ApplicationRecord
   end
 
   def self.transform_prep_time_to_min(pttime)
-    pttime.delete!("PT")
-    hours = ""
-    minutes = ""
-    mode = ""
-    i = pttime.length - 1
-    while i >= 0
-      if pttime[i] == "M"
-        mode = "min"
-      elsif pttime[i] == "H"
-        mode = "hr"
-      else  
-        if mode == "min"
-          minutes = pttime[i] + minutes
-        elsif mode == "hr"
-          hours = pttime[i] + hours
+    if pttime == nil
+      0
+    else
+      pttime.delete!("PT")
+      hours = ""
+      minutes = ""
+      mode = ""
+      i = pttime.length - 1
+      while i >= 0
+        if pttime[i] == "M"
+          mode = "min"
+        elsif pttime[i] == "H"
+          mode = "hr"
+        else  
+          if mode == "min"
+            minutes = pttime[i] + minutes
+          elsif mode == "hr"
+            hours = pttime[i] + hours
+          end
         end
+        i -= 1
       end
-      i -= 1
+      minutes.to_i + (hours.to_i * 60)
     end
-    minutes.to_i + (hours.to_i * 60)
   end
 
   def self.transform_recipe(recipe_schema, site_name, url) 
+    # Handle array vs single image
     if recipe_schema["image"].class == Array
       image = recipe_schema["image"][0]
     elsif recipe_schema["image"].class == String
       image = recipe_schema["image"]
     end
+    # Handle array vs single string ingredients
+    if recipe_schema["recipeIngredient"].class == Array
+      ingredients = recipe_schema["recipeIngredient"].join("\n")
+    elsif recipe_schema["recipeIngredient"].class == String
+      ingredients = recipe_schema["recipeIngredient"]
+    end
+    # Handle array vs single string instructions
+    if recipe_schema["recipeInstructions"].class == Array
+      instructions = recipe_schema["recipeInstructions"].map do |instruction| 
+        ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) 
+      end.join("\n")
+    elsif recipe_schema["recipeInstructions"].class == String
+      instructions = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeInstructions"])
+    end
+    # Build the recipe object
     {
       name: recipe_schema["name"],
       source: site_name,
@@ -64,10 +84,8 @@ class Recipe < ApplicationRecord
       servings: recipe_schema["recipeYield"],
       total_prep_time: transform_prep_time_to_min(recipe_schema["totalTime"]),
       intro: recipe_schema["description"],
-      ingredients: recipe_schema["recipeIngredient"].join("\n"),
-      instructions: recipe_schema["recipeInstructions"].map do |instruction| 
-        ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) 
-      end.join("\n"),
+      ingredients: ingredients,
+      instructions: instructions,
       image_url: image
     }
   end
