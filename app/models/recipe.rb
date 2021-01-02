@@ -22,22 +22,34 @@ class Recipe < ApplicationRecord
     # Handle different possibilities for what lives in the parsed_jsons
     recipe_schema = ""
     parsed_jsons.each do |parsed_json|
-      if parsed_json['@type'] == 'Recipe'
+      # If the object is an array
+      if parsed_json.class == Array
+        parsed_json.each do |array_item|
+          if array_item['@type'] == 'Recipe'
+            recipe_schema = array_item
+          end
+        end
+      # If the type of the object is Recipe (not an array)
+      elsif parsed_json['@type'] == 'Recipe'
         recipe_schema = parsed_json
+      # If the object has a graph
       elsif parsed_json['@graph'].class == Array
         parsed_json['@graph'].each do |graph_element|
           if graph_element['@type'] == 'Recipe'
             recipe_schema = graph_element
           end
         end
-      #deal with arrays with no graph 
       end
     end
     return recipe_schema
   end
 
   def self.find_site_name(parsed_object)
-    site_name = parsed_object.css('meta[property="og:site_name"]').first['content']
+    if parsed_object.css('meta[property="og:site_name"]').first == nil
+      site_name = ""
+    else
+      site_name = parsed_object.css('meta[property="og:site_name"]').first['content']
+    end
   end
 
   def self.transform_prep_time_to_min(pttime)
