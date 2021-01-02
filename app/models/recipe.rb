@@ -17,11 +17,23 @@ class Recipe < ApplicationRecord
   end
 
   def self.find_recipe_schema(parsed_object)
-    schemas = parsed_object.css("script[type='application/ld+json']")
-    parsed_schemas = schemas.map { |schema| JSON.parse(schema.text) }
-    recipe_schema = parsed_schemas.find do |parsed_schema|
-      parsed_schema['@type'] == 'Recipe'
+    unparsed_jsons = parsed_object.css("script[type='application/ld+json']")
+    parsed_jsons = unparsed_jsons.map { |json| JSON.parse(json.text) }
+    # Handle different possibilities for what lives in the parsed_jsons
+    recipe_schema = ""
+    parsed_jsons.each do |parsed_json|
+      if parsed_json['@type'] == 'Recipe'
+        recipe_schema = parsed_json
+      elsif parsed_json['@graph'].class == Array
+        parsed_json['@graph'].each do |graph_element|
+          if graph_element['@type'] == 'Recipe'
+            recipe_schema = graph_element
+          end
+        end
+      #deal with arrays with no graph 
+      end
     end
+    return recipe_schema
   end
 
   def self.find_site_name(parsed_object)
@@ -56,11 +68,11 @@ class Recipe < ApplicationRecord
   end
 
   def self.transform_recipe(recipe_schema, site_name, url) 
-    # Handle array vs single image
-    if recipe_schema["image"].class == Array
-      image = recipe_schema["image"][0]
-    elsif recipe_schema["image"].class == String
-      image = recipe_schema["image"]
+    # Sanitize intro (remove HTML)
+    if url.include?("barefootcontessa.com")
+      intro = ""
+    else
+      intro = ActionView::Base.full_sanitizer.sanitize(recipe_schema["description"])
     end
     # Handle array vs single string ingredients
     if recipe_schema["recipeIngredient"].class == Array
@@ -76,6 +88,14 @@ class Recipe < ApplicationRecord
     elsif recipe_schema["recipeInstructions"].class == String
       instructions = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeInstructions"])
     end
+    # Handle array vs single image
+    if recipe_schema["image"].class == Array
+      image = recipe_schema["image"][0]
+    elsif recipe_schema["image"].class == String
+      image = recipe_schema["image"]
+    elsif recipe_schema["image"].class == Hash
+      image = recipe_schema["image"]["url"]
+    end
     # Build the recipe object
     {
       name: recipe_schema["name"],
@@ -83,7 +103,7 @@ class Recipe < ApplicationRecord
       recipe_url: url,
       servings: recipe_schema["recipeYield"],
       total_prep_time: transform_prep_time_to_min(recipe_schema["totalTime"]),
-      intro: recipe_schema["description"],
+      intro: intro,
       ingredients: ingredients,
       instructions: instructions,
       image_url: image
