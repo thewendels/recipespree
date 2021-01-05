@@ -99,9 +99,11 @@ class Recipe < ApplicationRecord
     end
     # Handle array vs single string ingredients
     if recipe_schema["recipeIngredient"].class == Array
-      ingredients = recipe_schema["recipeIngredient"].join("\n")
+      ingredients = recipe_schema["recipeIngredient"].map do |ingredient| 
+        ActionView::Base.full_sanitizer.sanitize(ingredient) 
+      end.join("\n")
     elsif recipe_schema["recipeIngredient"].class == String
-      ingredients = recipe_schema["recipeIngredient"]
+      ingredients = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeIngredient"])
     end
     # Handle array vs single string instructions
     if recipe_schema["recipeInstructions"].class == Array
