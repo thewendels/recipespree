@@ -3,14 +3,12 @@ class Api::RecipesController < ApplicationController
 
   def index
     @recipes = Recipe.where(user_id: current_user.id).order(id: :desc)
-    
     search = params[:search]
     if search
       search_terms = search.split(" ").each do |search_term|
         @recipes = @recipes.where("name ILIKE ? OR ingredients ILIKE ? OR instructions ILIKE ? or notes ILIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
       end
     end
-
     render 'index.json.jb'
   end
 
@@ -58,7 +56,6 @@ class Api::RecipesController < ApplicationController
 
   def update
     @recipe = Recipe.find(params[:id])
-
     @recipe.name = params[:name] || @recipe.name
     @recipe.source = params[:source] || @recipe.source
     @recipe.recipe_url = params[:recipe_url] || @recipe.recipe_url
@@ -69,18 +66,15 @@ class Api::RecipesController < ApplicationController
     @recipe.instructions = params[:instructions] || @recipe.instructions
     @recipe.notes = params[:notes] || @recipe.notes
     @recipe.image_url = params[:image_url] || @recipe.image_url
-
     if @recipe.save
       render 'show.json.jb'
     else 
       render json: { errors: @recipe.errors.full_messages }, status: :unprocessable_entity
     end
-
   end
 
   def destroy
     @recipe = Recipe.find(params[:id])
-
     @recipe.destroy
     render json: {message: "Recipe successfully deleted!"}
   end
