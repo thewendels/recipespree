@@ -6,7 +6,7 @@ class Api::RecipesController < ApplicationController
     search = params[:search]
     if search
       search_terms = search.split(" ").each do |search_term|
-        @recipes = @recipes.where("name ILIKE ? OR ingredients ILIKE ? OR instructions ILIKE ? or notes ILIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
+        @recipes = @recipes.where("name ILIKE ? OR source ILIKE ? OR ingredients ILIKE ? OR instructions ILIKE ? or notes ILIKE ?", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%", "%#{search_term}%")
       end
     end
     render 'index.json.jb'
