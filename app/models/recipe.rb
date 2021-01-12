@@ -7,7 +7,7 @@ class Recipe < ApplicationRecord
 
   validates :user_id, presence: true
   validates :name, presence: true
-  validates :total_prep_time, numericality: { only_integer: true, greater_than: 0, allow_nil: true}
+  validates :total_prep_time, numericality: { only_integer: true, greater_than_or_equal_to: 0, allow_nil: true}
   validates :ingredients, presence: true
   validates :instructions, presence: true
 
@@ -59,26 +59,6 @@ class Recipe < ApplicationRecord
     else
       # ActiveSupport::Duration with .to_i takes all the times in the object and gives you back the number of seconds
       time_hash = ActiveSupport::Duration.parse(pttime).to_i/60
-      # pttime.delete!("PT")
-      # hours = ""
-      # minutes = ""
-      # mode = ""
-      # i = pttime.length - 1
-      # while i >= 0
-      #   if pttime[i] == "M"
-      #     mode = "min"
-      #   elsif pttime[i] == "H"
-      #     mode = "hr"
-      #   else  
-      #     if mode == "min"
-      #       minutes = pttime[i] + minutes
-      #     elsif mode == "hr"
-      #       hours = pttime[i] + hours
-      #     end
-      #   end
-      #   i -= 1
-      # end
-      # minutes.to_i + (hours.to_i * 60)
     end
   end
 
@@ -90,6 +70,12 @@ class Recipe < ApplicationRecord
       source = recipe_schema["author"]["name"]
     else
       source = site_name
+    end
+    # Handle array vs string servings
+    if recipe_schema["recipeYield"].class == Array
+      servings = recipe_schema["recipeYield"][1]
+    elsif recipe_schema["recipeYield"].class == String
+      servings = recipe_schema["recipeYield"]
     end
     # Sanitize intro (remove HTML)
     if url.include?("barefootcontessa.com")
@@ -113,7 +99,7 @@ class Recipe < ApplicationRecord
     elsif recipe_schema["recipeInstructions"].class == String
       instructions = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeInstructions"])
     end
-    # Handle array vs single image
+    # Handle array vs single image vs hash
     if recipe_schema["image"].class == Array
       image = recipe_schema["image"][0]
     elsif recipe_schema["image"].class == String
@@ -126,7 +112,7 @@ class Recipe < ApplicationRecord
       name: recipe_schema["name"],
       source: source,
       recipe_url: url,
-      servings: recipe_schema["recipeYield"],
+      servings: servings,
       total_prep_time: transform_prep_time_to_min(recipe_schema["totalTime"]),
       intro: intro,
       ingredients: ingredients,
