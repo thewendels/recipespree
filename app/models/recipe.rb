@@ -92,10 +92,14 @@ class Recipe < ApplicationRecord
       ingredients = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeIngredient"])
     end
     # Handle array vs single string instructions
-    if recipe_schema["recipeInstructions"].class == Array
+    if recipe_schema["recipeInstructions"].class == Array && recipe_schema["recipeInstructions"][0]["@type"] == "HowToStep"
       instructions = recipe_schema["recipeInstructions"].map do |instruction| 
         ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) 
       end.join("\n")
+    elsif recipe_schema["recipeInstructions"].class == Array && recipe_schema["recipeInstructions"][0]["@type"] == "HowToSection"
+      instructions = recipe_schema["recipeInstructions"].map do |section| 
+        section["itemListElement"].map { |instruction| ActionView::Base.full_sanitizer.sanitize(instruction["text"].gsub("\n", "")) }
+      end.flatten.join("\n")
     elsif recipe_schema["recipeInstructions"].class == String
       instructions = ActionView::Base.full_sanitizer.sanitize(recipe_schema["recipeInstructions"])
     end
