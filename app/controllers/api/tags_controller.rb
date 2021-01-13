@@ -5,17 +5,6 @@ class Api::TagsController < ApplicationController
     @tags = Tag.where(user_id: current_user.id).order('lower(name)')
     render 'index.json.jb'
   end
-  
-  # def create
-  #   @tag = Tag.new({
-  #     name: params[:name]
-  #   })
-  #   if @tag.save
-  #     render 'show.json.jb'
-  #   else
-  #     render json: { errors: @tag.errors.full_messages }, status: :unprocessable_entity
-  #   end
-  # end
 
   def show
     @tag = Tag.find(params[:id])
